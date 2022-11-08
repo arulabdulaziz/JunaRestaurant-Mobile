@@ -18,7 +18,7 @@ const MainHeader = (props) => {
       <TouchableOpacity
         style={{ width: "10%" }}
         onPress={() => {
-          alert("go to chart page");
+          navigation.navigate("Chart");
         }}
       >
         <Entypo name="shopping-cart" size={30} color="white" />
@@ -40,7 +40,7 @@ const MainHeader = (props) => {
       <TouchableOpacity
         style={{ width: "10%" }}
         onPress={() => {
-          alert("Go to Profile page");
+          navigation.navigate("Profile");
         }}
       >
         <Entypo name="user" size={30} color="white" />
