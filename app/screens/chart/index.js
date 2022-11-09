@@ -92,23 +92,49 @@ class Chart extends Component {
     }
   };
   checkout = async () => {
-    if (
-      !this?.state?.chart?.no_table ||
-      !Number(this?.state?.chart?.no_table)
-    ) {
-      return alert("Nomor Meja Wajib Diisi Dengan Benar!");
-    }
-    let products = this?.state?.chart?.products ?? [];
-    products = products.filter(
-      (e) =>
-        e.id &&
-        (Number(e.price) || Number(e.price) === 0) &&
-        Number(e.quantity) &&
-        e.name &&
-        e.picture
-    );
-    if (!products || products.length === 0) {
-      return alert("Produk Wajib Diisi Dengan Jumlah Minimal 1!");
+    try {
+      this.setState({ loading: true });
+      if (
+        !this?.state?.chart?.no_table ||
+        !Number(this?.state?.chart?.no_table)
+      ) {
+        return alert("Nomor Meja Wajib Diisi Dengan Benar!");
+      }
+      let products = this?.state?.chart?.products ?? [];
+      products = products.filter(
+        (e) =>
+          e.id &&
+          (Number(e.price) || Number(e.price) === 0) &&
+          Number(e.quantity) &&
+          e.name &&
+          e.picture
+      );
+      if (!products || products.length === 0) {
+        return alert("Produk Wajib Diisi Dengan Jumlah Minimal 1!");
+      }
+      const { data } = await axios.post("checkout", this.state.chart, {
+        headers: { token: this.state.token },
+      });
+      if (data?.data) {
+        Alert.alert(
+          "Berhasil",
+          "Pesanan kamu berhasil di checkout, silakan tunggu di meja " +
+            this?.state?.chart?.no_table
+        );
+        this.setState({ chart }, () => {
+          this.props.navigation.goBack();
+        });
+        return;
+      }
+      throw "Error";
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error?.response?.data?.message
+        ? error?.response?.data?.message
+        : JSON.stringify(error);
+      Alert.alert("Error", errorMessage);
+    } finally {
+      this.setState({ loading: false });
     }
   };
   deleteProduct = ({ item, index }) => {
