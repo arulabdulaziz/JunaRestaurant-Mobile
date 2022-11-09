@@ -5,7 +5,12 @@
 Follow link below
 https://github.com/arulabdulaziz/JunaRestaurant-Backend
 
+
 ## Demo Application
+https://user-images.githubusercontent.com/71963870/200808508-fd3add66-adf8-4b2a-b9c6-7dbffde7674b.mp4
+
+## Demo How To Run
+https://user-images.githubusercontent.com/71963870/200808596-7abed02a-a207-4ea8-834b-88a7670883d2.mp4
 
 ### Account
 
