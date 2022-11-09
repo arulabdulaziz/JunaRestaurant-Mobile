@@ -27,7 +27,7 @@ const MainHeader = (props) => {
       <TouchableOpacity
         style={{ width: "10%" }}
         onPress={() => {
-          navigation.navigate("History");
+          navigation.navigate("History", { token: props?.token });
         }}
       >
         <Ionicons name="receipt" size={30} color="white" />

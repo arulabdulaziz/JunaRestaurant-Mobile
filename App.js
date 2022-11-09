@@ -8,6 +8,7 @@ import Register from "./app/screens/register";
 import Main from "./app/screens/main";
 import Profile from "./app/screens/profile";
 import Chart from "./app/screens/chart";
+import History from "./app/screens/history";
 
 export default function App() {
   const [token, setTokenApp] = useState("");
@@ -40,6 +41,11 @@ export default function App() {
           name="Chart"
           component={Chart}
           option={{ title: "Chart" }}
+        />
+        <Stack.Screen
+          name="History"
+          component={History}
+          option={{ title: "Riwayat Order" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

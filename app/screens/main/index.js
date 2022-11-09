@@ -78,6 +78,7 @@ export class Main extends Component {
         <MainHeader
           navigation={this.props.navigation}
           logout={() => this.logout()}
+          token={this.state.token}
         />
 
         <View style={{ paddingHorizontal: 5, backgroundColor: "#f4f4f4" }}>
