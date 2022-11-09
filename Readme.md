@@ -5,6 +5,8 @@
 Follow link below
 https://github.com/arulabdulaziz/JunaRestaurant-Backend
 
+## APK File
+https://drive.google.com/drive/folders/1ABrpEkNvhcBeje24sL3xdy35xkSqRb_K
 
 ## Demo Application
 https://user-images.githubusercontent.com/71963870/200808508-fd3add66-adf8-4b2a-b9c6-7dbffde7674b.mp4
@@ -26,6 +28,10 @@ password: 1234
 - Or You can registry on app
 
 ## How to Run
+
+### Using APK File
+
+1. Download file apk on link above, and install
 
 ### Using expo link
 
