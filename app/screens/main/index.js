@@ -22,6 +22,7 @@ export class Main extends Component {
     loadingFetch: true,
     errorFetch: false,
     data: [],
+    token: "",
   };
   componentDidMount() {
     AsyncStorage.getItem("token")
@@ -29,7 +30,9 @@ export class Main extends Component {
         if (!token) {
           this.props.navigation.replace("Login");
         } else {
-          this.fetchProduct();
+          this.setState({ token }, () => {
+            this.fetchProduct();
+          });
         }
       })
       .finally((_) => {
@@ -62,6 +65,9 @@ export class Main extends Component {
     } finally {
       this.setState({ loading: true });
     }
+  };
+  setLoading = (loading) => {
+    this.setState({ loading });
   };
   render() {
     return (
@@ -102,7 +108,13 @@ export class Main extends Component {
           )}
           <FlatList
             data={this.state.data}
-            renderItem={(data) => <CardProduct data={data} />}
+            renderItem={(data) => (
+              <CardProduct
+                data={data}
+                token={this.state.token}
+                setLoading={this.setLoading}
+              />
+            )}
             keyExtractor={(item) => (item.id ? item.id : item.name)}
             numColumns={2}
             contentContainerStyle={{

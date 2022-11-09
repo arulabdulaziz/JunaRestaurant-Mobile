@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import React from "react";
-import { Entypo, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, MaterialIcons, Ionicons } from "@expo/vector-icons";
 
 const MainHeader = (props) => {
   const navigation = props.navigation;
@@ -23,8 +23,17 @@ const MainHeader = (props) => {
       >
         <Entypo name="shopping-cart" size={30} color="white" />
       </TouchableOpacity>
+      {/* History */}
+      <TouchableOpacity
+        style={{ width: "10%" }}
+        onPress={() => {
+          navigation.navigate("History");
+        }}
+      >
+        <Ionicons name="receipt" size={30} color="white" />
+      </TouchableOpacity>
       {/* Text */}
-      <View style={{ width: "70%" }}>
+      <View style={{ width: "60%" }}>
         <Text
           style={{
             color: "white",

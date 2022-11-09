@@ -5,10 +5,12 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
+  Alert,
 } from "react-native";
 import React from "react";
 import { formatMoney } from "../../../../helper";
 import { MaterialIcons } from "@expo/vector-icons";
+import axios from "../../../../api/axios";
 
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
@@ -16,7 +18,31 @@ const CardProduct = (props) => {
   const { item, index } = props.data;
   const isEven = index % 2 === 0;
   let loading = false;
-  const addToChart = async () => {};
+  const addToChart = async () => {
+    try {
+      props.setLoading(true);
+      const { data } = await axios.post(
+        "product_to_chart",
+        { product: { ...item, quantity: 1 } },
+        {
+          headers: { token: props?.token },
+        }
+      );
+      if (data?.data) {
+        Alert.alert("Berhasil", "Berhasil memasukkan ke keranjang");
+        return;
+      }
+      throw "Error";
+    } catch (error) {
+      console.log(error);
+      const errorMessage = error?.response?.data?.message
+        ? error?.response?.data?.message
+        : JSON.stringify(error);
+      Alert.alert("Error", errorMessage);
+    } finally {
+      props.setLoading(false);
+    }
+  };
   return (
     <View
       style={{

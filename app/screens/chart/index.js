@@ -7,50 +7,28 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import React, { Component } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AntDesign } from "@expo/vector-icons";
 import Spinner from "react-native-loading-spinner-overlay";
 import { formatMoney } from "../../helper";
+import axios from "../../api/axios";
+import CardChartProduct from "../../components/screens/chart/card-chart-product";
 
 const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
 const chart = {
-  user_id: "63690b06acccc9e218425224",
+  user_id: "",
   no_table: 0,
-  total_price: 111000,
+  total_price: 0,
   is_checkouted: false,
-  products: [
-    {
-      name: "Matcha Latte",
-      picture:
-        "https://cdn0-production-images-kly.akamaized.net/83UHpzNFaypePOj2GWPr97XaRaE=/172x0:839x667/1200x900/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/4055999/original/087914700_1655451637-shutterstock_1293089503.jpg",
-      price: 20000,
-      quantity: 2,
-      id: "6368e179adc2b2ea91257157",
-    },
-    {
-      name: "Ramen Special Kuah Karee",
-      picture:
-        "https://selerasa.com/wp-content/uploads/2015/05/images_mie_Mie_Ramen_26-mie-ramen-kuah-kari-1200x798.jpg",
-      price: 28000,
-      quantity: 2,
-      id: "6368e31dadc2b2ea91257164",
-    },
-    {
-      name: "Lemon Tea",
-      picture:
-        "https://dcostseafood.id/wp-content/uploads/2021/12/ES-LEMON-TEA.jpg",
-      price: 15000,
-      quantity: 1,
-      id: "6368e332adc2b2ea91257166",
-    },
-  ],
-  createdAt: "2022-11-08T11:40:18.198Z",
-  updatedAt: "2022-11-08T11:48:15.604Z",
+  products: [],
+  createdAt: "",
+  updatedAt: "",
   __v: 0,
-  id: "636a4022783705423962b9c6",
+  id: "",
 };
 class Chart extends Component {
   state = {
@@ -74,11 +52,41 @@ class Chart extends Component {
         this.props.navigation.goBack();
       });
   }
+  componentWillUnmount() {
+    this.submitChart();
+  }
+  submitChart = async () => {
+    try {
+      this.setState({ loading: true });
+      const { data } = await axios.post("chart", this.state.chart, {
+        headers: {
+          token: this.state.token,
+        },
+      });
+      if (data?.data && data.data?.id) {
+        return this.setState({ chart: data.data });
+      }
+      throw "Error";
+    } catch (error) {
+      console.log(error);
+    } finally {
+    }
+  };
   fetchCart = async () => {
     try {
       this.setState({ loading: true });
+      const { data } = await axios.get("chart", {
+        headers: {
+          token: this.state.token,
+        },
+      });
+      if (data?.data && data.data?.id) {
+        return this.setState({ chart: data.data });
+      }
+      throw "Error";
     } catch (error) {
       console.log(error);
+      this.props.navigation.goBack();
     } finally {
       this.setState({ loading: false });
     }
@@ -103,6 +111,85 @@ class Chart extends Component {
       return alert("Produk Wajib Diisi Dengan Jumlah Minimal 1!");
     }
   };
+  deleteProduct = ({ item, index }) => {
+    const products =
+      this?.state?.chart?.products?.filter((e) => e.id !== item.id) ?? [];
+    const newChart = {
+      ...this.state.chart,
+      products,
+    };
+    newChart.total_price = newChart.products
+      .map((e) => Number(e.price) * Number(e.quantity))
+      .reduce((partialSum, a) => partialSum + a, 0);
+    this.setState({
+      chart: newChart,
+    });
+  };
+  plusProduct = ({ item, index }) => {
+    const newChart = {
+      ...this.state.chart,
+      products:
+        this?.state?.chart?.products?.map((e) => {
+          if (e.id === item.id) e.quantity = Number(e.quantity) + 1;
+          return e;
+        }) ?? [],
+    };
+    newChart.total_price = newChart.products
+      .map((e) => Number(e.price) * Number(e.quantity))
+      .reduce((partialSum, a) => partialSum + a, 0);
+    this.setState({
+      chart: newChart,
+    });
+  };
+  minusProduct = ({ item, index }) => {
+    const nextQuantity = Number(item.quantity) - 1;
+    if (nextQuantity <= 0) {
+      Alert.alert(
+        "Hapus Produk",
+        "Jumlah Produk akan menjadi 0, hapus produk?",
+
+        [
+          {
+            text: "Batal",
+            style: "cancel",
+          },
+          { text: "OK", onPress: () => this.deleteProduct({ item, index }) },
+        ]
+      );
+      return;
+    }
+    const newChart = {
+      ...this.state.chart,
+      products:
+        this?.state?.chart?.products?.map((e) => {
+          if (e.id === item.id) e.quantity = nextQuantity;
+          return e;
+        }) ?? [],
+    };
+    newChart.total_price = newChart.products
+      .map((e) => Number(e.price) * Number(e.quantity))
+      .reduce((partialSum, a) => partialSum + a, 0);
+    this.setState({
+      chart: newChart,
+    });
+  };
+  changeQuantityProduct = ({ item, index }, text) => {
+    const newQuantity = String(Math.abs(Math.round(Number(text) || 0)));
+    const newChart = {
+      ...this.state.chart,
+      products:
+        this?.state?.chart?.products?.map((e) => {
+          if (e.id === item.id) e.quantity = newQuantity;
+          return e;
+        }) ?? [],
+    };
+    newChart.total_price = newChart.products
+      .map((e) => Number(e.price) * Number(e.quantity))
+      .reduce((partialSum, a) => partialSum + a, 0);
+    this.setState({
+      chart: newChart,
+    });
+  };
   render() {
     return (
       <View>
@@ -113,8 +200,10 @@ class Chart extends Component {
         />
         <Spinner visible={this.state.loading} color={"#054182"} />
         <View style={{ marginVertical: 10, paddingHorizontal: 10 }}>
-          <Text style={{ fontSize: 16, fontWeight: "bold" }}>Total Harga:</Text>
-          <Text>Rp {formatMoney(this?.state?.chart?.total_price ?? 0)}</Text>
+          <Text style={{ fontSize: 16 }}>Total Harga:</Text>
+          <Text style={{ fontWeight: "bold" }}>
+            Rp {formatMoney(this?.state?.chart?.total_price ?? 0)}
+          </Text>
         </View>
         <View style={{ alignItems: "center", justifyContent: "center" }}>
           <TouchableOpacity
@@ -154,13 +243,20 @@ class Chart extends Component {
           </View>
           <FlatList
             data={this.state?.chart?.products ?? []}
-            renderItem={({ item, index }) => (
-              <View style={{ height: 50 }}>
-                <Text>{item.name}</Text>
-              </View>
+            renderItem={(data) => (
+              <CardChartProduct
+                data={data}
+                deleteProduct={this.deleteProduct}
+                plusProduct={this.plusProduct}
+                minusProduct={this.minusProduct}
+                changeQuantityProduct={this.changeQuantityProduct}
+              />
             )}
             keyExtractor={(item) => (item.id ? item.id : item.name)}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingBottom: HEIGHT / 1.8,
+            }}
           />
         </View>
       </View>
