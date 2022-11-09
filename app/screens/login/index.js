@@ -5,6 +5,7 @@ import {
   ActivityIndicator,
   TextInput,
   StatusBar,
+  StyleSheet,
 } from "react-native";
 import React, { Component } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -53,79 +54,53 @@ export class Login extends Component {
   };
   render() {
     return (
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          paddingHorizontal: 10,
-          backgroundColor: "white",
-        }}
-      >
+      <View style={styles.container}>
         <StatusBar
           translucent
           barStyle={"dark-content"}
           backgroundColor={"transparent"}
         />
-        <View style={{ width: "90%", marginVertical: 10 }}>
+        <View style={styles.inputContainer}>
           <Text>Username</Text>
           <TextInput
             value={this.state.username}
             onChangeText={(text) => this.setState({ username: text })}
-            style={{ borderBottomColor: "black", borderBottomWidth: 0.5 }}
+            style={styles.textInput}
             placeholder="Username"
             autoCapitalize="none"
           />
         </View>
-        <View style={{ width: "90%", marginVertical: 10 }}>
+        <View style={styles.inputContainer}>
           <Text>Password</Text>
           <TextInput
             value={this.state.password}
             onChangeText={(text) => this.setState({ password: text })}
-            style={{ borderBottomColor: "black", borderBottomWidth: 0.5 }}
+            style={styles.textInput}
             placeholder="*********"
             autoCapitalize="none"
             secureTextEntry
           />
         </View>
-        <View
-          style={{ width: "90%", marginVertical: 20, flexDirection: "row" }}
-        >
-          <Text style={{ fontSize: 12, color: "#1166C2" }}>
-            Belum Punya akun?{" "}
-          </Text>
+        <View style={styles.containerTextInfo}>
+          <Text style={styles.textInfoLabel}>Belum Punya akun? </Text>
           <TouchableOpacity
             onPress={() => {
               this.props.navigation.navigate("Register");
             }}
           >
-            <Text
-              style={{
-                fontSize: 12,
-                color: "#1166C2",
-                borderBottomColor: "#1166C2",
-                borderBottomWidth: 0.5,
-              }}
-            >
-              Daftar Disini
-            </Text>
+            <Text style={styles.textInfo}>Daftar Disini</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
           disabled={this.state.loading}
-          style={{
-            width: "90%",
-            marginVertical: 10,
-            backgroundColor: "#054182",
-            padding: 10,
-            borderRadius: 10,
-          }}
+          style={styles.button}
           onPress={this.submit}
         >
           <>
             {this.state.loading ? (
               <ActivityIndicator color={"white"} />
             ) : (
-              <Text style={{ color: "white", textAlign: "center" }}>Login</Text>
+              <Text style={styles.textButton}>Login</Text>
             )}
           </>
         </TouchableOpacity>
@@ -133,5 +108,30 @@ export class Login extends Component {
     );
   }
 }
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    paddingHorizontal: 10,
+    backgroundColor: "white",
+  },
+  inputContainer: { width: "90%", marginVertical: 10 },
+  textInput: { borderBottomColor: "black", borderBottomWidth: 0.5 },
+  containerTextInfo: { width: "90%", marginVertical: 20, flexDirection: "row" },
+  textInfoLabel: { fontSize: 12, color: "#1166C2" },
+  textInfo: {
+    fontSize: 12,
+    color: "#1166C2",
+    borderBottomColor: "#1166C2",
+    borderBottomWidth: 0.5,
+  },
+  button: {
+    width: "90%",
+    marginVertical: 10,
+    backgroundColor: "#054182",
+    padding: 10,
+    borderRadius: 10,
+  },
+  textButton: { color: "white", textAlign: "center" },
+});
 export default Login;

@@ -9,6 +9,7 @@ import Main from "./app/screens/main";
 import Profile from "./app/screens/profile";
 import Chart from "./app/screens/chart";
 import History from "./app/screens/history";
+import HistoryDetail from "./app/screens/history-detail";
 
 export default function App() {
   const [token, setTokenApp] = useState("");
@@ -47,16 +48,14 @@ export default function App() {
           component={History}
           option={{ title: "Riwayat Order" }}
         />
+        <Stack.Screen
+          name="HistoryDetail"
+          component={HistoryDetail}
+          option={{ title: "Detail Riwayat Order" }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const styles = StyleSheet.create({});

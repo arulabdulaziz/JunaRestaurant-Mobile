@@ -16,27 +16,8 @@ const WIDTH = Dimensions.get("screen").width;
 const HEIGHT = Dimensions.get("screen").height;
 const CardChartProduct = (props) => {
   const { item, index } = props.data;
-  let loading = false;
   return (
-    <View
-      style={{
-        backgroundColor: "white",
-        padding: 5,
-        marginBottom: 5,
-        marginHorizontal: 5,
-        borderRadius: 5,
-        shadowColor: "#000",
-        shadowOffset: {
-          width: 0,
-          height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.0,
-
-        elevation: 24,
-        flexDirection: "row",
-      }}
-    >
+    <View style={styles.container}>
       <Image
         source={{ uri: item.picture }}
         style={{
@@ -90,4 +71,22 @@ const CardChartProduct = (props) => {
 
 export default CardChartProduct;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "white",
+    padding: 5,
+    marginBottom: 5,
+    marginHorizontal: 5,
+    borderRadius: 5,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 12,
+    },
+    shadowOpacity: 0.58,
+    shadowRadius: 16.0,
+
+    elevation: 24,
+    flexDirection: "row",
+  },
+});
